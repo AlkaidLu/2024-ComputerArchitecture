@@ -1,0 +1,3 @@
+g++ -o main main.cpp Multicycle.cpp
+
+.\main.exe code.txt 

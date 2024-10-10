@@ -1,9 +1,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "MIPSSimulator.h"
 
-//int counter=0;
+int counter=0;
 
-MIPSSimulator::MIPSSimulator(size_t memSize) : memory(memSize), pc(0x108) {}
+MIPSSimulator::MIPSSimulator(size_t memSize) : memory(memSize), pc(0x108), clock(0) {}
 
 void MIPSSimulator::load_memory(const char* filename) {
     FILE* file = fopen(filename, "r");
@@ -126,7 +126,7 @@ int MIPSSimulator::INSN_add_s(int instruction) {
 
 int MIPSSimulator::INSN_beq(int instruction) {
     //printf("beq\n");
-    //counter++;
+    counter++;
     int rs=(instruction>>21) & 0x1F;
     int rt=(instruction>>16) & 0x1F;
     int offset =instruction & 0xFFFF;
@@ -146,29 +146,8 @@ int MIPSSimulator::INSN_j(int instruction) {
 
 int MIPSSimulator::executeInstruction() {
     uint32_t instruction = memory.loadWord(pc);
-
     int opcode = (instruction >> 26) & 0x3F;
-    int funct = instruction & 0x3F; // 6位
-    int r1 = (instruction >> 21) & 0x1F;
-    int r2 = (instruction >> 16) & 0x1F;
-    int r3 = (instruction >> 11) & 0x1F;
-    int r4 = (instruction >> 6) & 0x1F;
-    int imm = instruction & 0xFFFF; 
-    int addr = instruction & 0x3FFFFFF;
-
-    Instruction inst;
-    inst.opcode = opcode;
-    inst.funct = funct;
-    inst.r1 = r1;
-    inst.r2 = r2;
-    inst.r3 = r3;
-    inst.r4 = r4;
-    inst.imm = imm;
-    inst.addr = addr;
-
-    //写入共享内存
-    
-
+    int funct = instruction & 0x3F;//6位
     if (instruction == 0x00000000) { // Check for halt instruction
             printf("halt!");
             return 1;
@@ -209,5 +188,6 @@ void MIPSSimulator::run() {
         if(executeInstruction()==1){
             break;
         }
+        clock++;
     }
 }
