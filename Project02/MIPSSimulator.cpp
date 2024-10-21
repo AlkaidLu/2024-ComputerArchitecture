@@ -1,9 +1,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "MIPSSimulator.h"
 
-//int counter=0;
 
-MIPSSimulator::MIPSSimulator(size_t memSize) : memory(memSize), pc(0x108) {}
+
+MIPSSimulator::MIPSSimulator(size_t memSize) : memory(memSize), pc(0x108), clock(0) {}
 
 void MIPSSimulator::load_memory(const char* filename) {
     FILE* file = fopen(filename, "r");
@@ -126,7 +126,6 @@ int MIPSSimulator::INSN_add_s(int instruction) {
 
 int MIPSSimulator::INSN_beq(int instruction) {
     //printf("beq\n");
-    //counter++;
     int rs=(instruction>>21) & 0x1F;
     int rt=(instruction>>16) & 0x1F;
     int offset =instruction & 0xFFFF;
@@ -144,70 +143,77 @@ int MIPSSimulator::INSN_j(int instruction) {
 }
 
 
-int MIPSSimulator::executeInstruction() {
+int MIPSSimulator::executeInstruction(int semId,struct Buffer *shm) {
     uint32_t instruction = memory.loadWord(pc);
-
-    int opcode = (instruction >> 26) & 0x3F;
-    int funct = instruction & 0x3F; // 6位
-    int r1 = (instruction >> 21) & 0x1F;
-    int r2 = (instruction >> 16) & 0x1F;
-    int r3 = (instruction >> 11) & 0x1F;
-    int r4 = (instruction >> 6) & 0x1F;
-    int imm = instruction & 0xFFFF; 
-    int addr = instruction & 0x3FFFFFF;
-
-    Instruction inst;
-    inst.opcode = opcode;
-    inst.funct = funct;
-    inst.r1 = r1;
-    inst.r2 = r2;
-    inst.r3 = r3;
-    inst.r4 = r4;
-    inst.imm = imm;
-    inst.addr = addr;
-
-    //写入共享内存
-    
+    Instruction instr;
+    instr.instruction=instruction;
+    instr.opcode = (instruction >> 26) & 0x3F;
+    instr.funct = instruction & 0x3F; // 6位
+    instr.r1 = (instruction >> 21) & 0x1F;
+    instr.r2 = (instruction >> 16) & 0x1F;
+    instr.r3 = (instruction >> 11) & 0x1F;
+    instr.r4 = (instruction >> 6) & 0x1F;
+    instr.imm = instruction & 0xFFFF;
+    instr.addr = instruction & 0x3FFFFFF;
 
     if (instruction == 0x00000000) { // Check for halt instruction
-            printf("halt!");
+            printf("halt!\n");
+            Producer(semId, shm, instr); 
             return 1;
         }
-    switch (opcode) {
+    switch (instr.opcode) {
         case OP_addi: 
             pc = INSN_addi(instruction); 
+            strcpy(instr.Instrtype,"ADDI");
+            instr.Cycles2live=5;
             break;
         case OP_lwcl: 
             pc = INSN_lwcl(instruction); 
+            strcpy(instr.Instrtype,"LWC1");
+            instr.Cycles2live=4;
             break;
         case OP_beq: 
             pc = INSN_beq(instruction); 
+            strcpy(instr.Instrtype,"BEQ");
+            instr.Cycles2live=2;
             break;
         case OP_FType: 
-            switch(funct){
+            switch(instr.funct){
                 case FUNC_mul_s:
                 pc = INSN_mul_s(instruction); 
+                strcpy(instr.Instrtype,"MULS");
+                instr.Cycles2live=5;
                 break;
                 case FUNC_add_s:
                 pc = INSN_add_s(instruction); 
+                strcpy(instr.Instrtype,"ADDS");
+                instr.Cycles2live=5;
                 break;
             }
             break;
         case OP_swcl: 
             pc = INSN_swcl(instruction); 
+            strcpy(instr.Instrtype,"SWC1");
+            instr.Cycles2live=4;
             break;
         case OP_j: 
             pc = INSN_j(instruction); 
+            strcpy(instr.Instrtype,"J");
+            instr.Cycles2live=2;
             break;
-        default: printf("error: unimplemented instruction\n"); printf("pc:%x\n instruction:%x\n",pc,instruction); exit(-1);
+        default: printf("error: unimplemented instruction\n"); printf("pc:%lx\n instruction:%x\n",pc,instruction); exit(-1);
     }
+    Producer(semId, shm, instr); 
+    
     return 0;
 }
 
-void MIPSSimulator::run() {
+void MIPSSimulator::run(int semId,struct Buffer *shm) {
     while (pc < memory.getsize()) {
-        if(executeInstruction()==1){
+        if(executeInstruction(semId,shm)==1){
+            
             break;
         }
+        
     }
 }

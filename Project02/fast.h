@@ -1,3 +1,6 @@
+#pragma once
+
+// 头文件内容
 enum opcodes {
     /* R-Type */
   OP_RType=0b000000,

@@ -1,3 +1,6 @@
+#pragma once
+
+// 头文件内容
 #include <vector>
 #include <cstdint>
 #include <cmath>

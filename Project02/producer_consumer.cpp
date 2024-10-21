@@ -1,42 +1,12 @@
-#include <time.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/sem.h>
-#include <sys/shm.h>
-#include <sys/ipc.h>
-
-
-#define SEMKEY 123
-#define SHMKEY 456
-#define BUFNUM 10
-#define SEMNUM 3
-
-#if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)
-/*   union   semun   is   defined   by   including   <sys/sem.h>   */ 
-#else 
-/*   according   to   X/OPEN   we   have   to   define   it   ourselves   */ 
-union semun
-{
-	int val;
-	struct semid_ds *buf;
-	unsigned short *array;
-};
-#endif
-
-struct Buffer
-{
-    int start, end;
-    char buffer[BUFNUM];
-};
+#include"producer_consumer.h"
 
 void Initialize(int *returnSemId, int *returnShmId, struct Buffer **returnShm)
 {
     int semId = -1, shmId = -1, values[SEMNUM] = {BUFNUM, 0, 1};
 
-    /*  semSet[0]: empty, initial value: n
-        semSet[1]: full, initial value 0
-        semSet[2]: mutex, initial value 1   */
+    /*  semSet[0]: 信号量P,   empty, initial value n
+        semSet[1]: 信号量V,   full,  initial value 0
+        semSet[2]: 互斥信号量, mutex, initial value 1   */
 
     semId = semget(SEMKEY, SEMNUM, IPC_CREAT | 0666);
     if(semId == -1)
@@ -57,13 +27,17 @@ void Initialize(int *returnSemId, int *returnShmId, struct Buffer **returnShm)
         }
     }
 
-    shmId = shmget(SHMKEY, sizeof(struct Buffer), IPC_CREAT | 0666);
+    shmId = shmget(SHMKEY, sizeof(struct Buffer)*1000, IPC_CREAT | 0666);
+    //共享内存有1000个Buffer块大小
+
     if(shmId == -1)
     {
         printf("share memory creation failed!\n");
         exit(EXIT_FAILURE);
     }
-
+    #ifdef DEBUG
+     printf("share memory creation succeeded!\n");
+    #endif
     void *temp = NULL;
     struct Buffer *shm = NULL;
     temp = shmat(shmId, 0, 0);
@@ -72,36 +46,38 @@ void Initialize(int *returnSemId, int *returnShmId, struct Buffer **returnShm)
         printf("share memory attachment failed!\n");
         exit(EXIT_FAILURE);        
     }
+     #ifdef DEBUG
+     printf("share memory attachment succeeded!\n");
+    #endif
     shm = (struct Buffer *) temp;
 
     shm -> start = 0;
     shm -> end = 0;
-    for(i = 0; i < BUFNUM; i++)
-    {
-        shm -> buffer[i] = ' ';
-    }
 
     *returnSemId = semId;
     *returnShmId = shmId;
     *returnShm = shm;
 }
 
-void Add(struct Buffer *shm)
+void Add(struct Buffer *shm, Type buf)
 {
-    char product = 'A' + rand() % 26;
-    printf("producer %d: added product %c into buffer:\t", getpid(), product);
+    Type product = buf;
+    #ifdef DEBUG
+    //printf("producer %d: added product %s into buffer.\t", getpid(), product.Instrtype);
+    #endif
     shm -> buffer [shm -> end] = product;
     shm -> end = (shm -> end + 1) % BUFNUM;
-    printf("|%s|\n", shm -> buffer);
+    //printf("|%s|\n", shm -> buffer);
 }
 
-void Remove(struct Buffer *shm)
+Type Remove(struct Buffer *shm)
 {
-    char product = shm -> buffer [shm -> start];
-    printf("consumer %d: removed product %c from buffer:\t", getpid(), product);
-    shm -> buffer [shm -> start] = ' ';
+    Type product = shm -> buffer [shm -> start];
+    //printf("consumer %d: removed product %c from buffer:\t", getpid(), product);
+    //memset(&shm->buffer[shm->start], 0, sizeof(Type));
     shm -> start = (shm -> start + 1) % BUFNUM;
-    printf("|%s|\n", shm -> buffer);
+    return product;
+    //printf("|%s|\n", shm -> buffer);
 }
 
 void ShmDestroy(int semId, struct Buffer * shm)
@@ -161,79 +137,40 @@ void Destroy(int semId, int shmId, struct Buffer *shm)
     printf("destruction finished! exit\n");
 }
 
-void Producer(int semId, struct Buffer *shm)
+void Producer(int semId, struct Buffer *shm, Type buf)
 {
-    do{
-        // wait empty region
-        SemWait(semId, 0);
-        // wait mutex
-        SemWait(semId, 2);
+    // wait empty region
+    SemWait(semId, 0);
+    // wait mutex
+    SemWait(semId, 2);
 
-        Add(shm);
+    Add(shm,buf);
 
-        // signal mutex
-        SemSignal(semId, 2);
-        // singal full region
-        SemSignal(semId, 1);
+    // signal mutex
+    SemSignal(semId, 2);
+    // singal full region
+    SemSignal(semId, 1);
 
-        sleep(random() % 2);
-
-    }while(1);
+    sleep(random() % 2);
 }
 
-void Consumer(int semId, struct Buffer *shm)
+Type Consumer(int semId, struct Buffer *shm)
 {
-    do{
-        // wait full region
-        SemWait(semId, 1);
-        // wait mutex
-        SemWait(semId, 2);
+    // wait full region
+    SemWait(semId, 1);
+    // wait mutex
+    SemWait(semId, 2);
 
-        Remove(shm);
+    Type product=Remove(shm);
 
-        // signal mutex
-        SemSignal(semId, 2);
-        // singal empty region
-        SemSignal(semId, 0);
+    // signal mutex
+    SemSignal(semId, 2);
+    // singal empty region
+    SemSignal(semId, 0);
 
-        sleep(random() % 2);
+    sleep(random() % 2);
 
-    }while(1);
+    return product;
 }
 
-int main(int argc, char *argv[])
-{
-    int semId = -1, shmId = -1, i=0;
-    int processNum = atoi(argv[2]);
-    if(processNum <= 0) processNum = 1;
-    struct Buffer *shm = NULL;
 
-    Initialize(&semId, &shmId, &shm);
-    for(i = 0; i < 2 * processNum; i ++)
-    {
-        pid_t pid = fork();
-        if(pid < 0)
-        {
-            printf("fork failed!\n");
-            exit(EXIT_FAILURE);
-        }
-        else if(pid == 0)
-        {
-            sleep(1);
-            if(i % 2 == 0)
-            {
-                printf("producer process %d created\n", getpid());
-                Producer(semId, shm);            
-            }
-            else
-            {
-                printf("consumer process %d created\n", getpid());
-                Consumer(semId, shm);
-            }
-            return 0;
-        }
-    }
-    getchar();
-    Destroy(semId, shmId, shm);
-    return 0;
-}
