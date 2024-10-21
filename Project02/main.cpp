@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
             exit(EXIT_FAILURE);
         }
     if(pid==0){
-        PipeLine(semId, shm);//输入是已经译码好的部分(不对，这部分应该是在共享内存里)
+        PipeLine(semId, shm);//输入是共享内存那部分
         exit(EXIT_SUCCESS);
     }
     else{
@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
         
         int status;
         waitpid(pid, &status, 0); // 等待子进程结束
+        printf("OK!Child exited normally!\n");
         if (WIFEXITED(status)) {
             printf("Child exited with status %d\n", WEXITSTATUS(status));
         }

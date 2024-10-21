@@ -4,7 +4,8 @@
 #include"producer_consumer.h"
 #include"MIPSSimulator.h"
 #include<string>
-
+#include<fstream>
+#include <iomanip>
 //定义指令和流水线参数
 enum InstructionType {
     INT,
@@ -92,6 +93,6 @@ struct InstructionQueue {
 };
 
 
-
+void pipeprint_tofile(int fasttimes, STAGE IF, STAGE DE, STAGE EXE, STAGE MEM, STAGE WB);
 void pipeprint(int fasttimes,STAGE IF,STAGE DE,STAGE EXE,STAGE MEM,STAGE WB);
 int PipeLine(int semId,struct Buffer *shm);

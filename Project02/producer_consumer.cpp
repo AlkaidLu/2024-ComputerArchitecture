@@ -2,12 +2,14 @@
 
 void Initialize(int *returnSemId, int *returnShmId, struct Buffer **returnShm)
 {
+    // 定义信号量ID和共享内存ID，初始化信号量的初始值
     int semId = -1, shmId = -1, values[SEMNUM] = {BUFNUM, 0, 1};
 
     /*  semSet[0]: 信号量P,   empty, initial value n
         semSet[1]: 信号量V,   full,  initial value 0
         semSet[2]: 互斥信号量, mutex, initial value 1   */
 
+     // 创建信号量集，包含SEMNUM（即3个）信号量，权限为0666
     semId = semget(SEMKEY, SEMNUM, IPC_CREAT | 0666);
     if(semId == -1)
     {
@@ -15,6 +17,7 @@ void Initialize(int *returnSemId, int *returnShmId, struct Buffer **returnShm)
         exit(EXIT_FAILURE);
     }
 
+    // 设置信号量初始值
     int i = 0;
     union semun semUn;
     for(i = 0; i < SEMNUM; i ++)
@@ -27,8 +30,8 @@ void Initialize(int *returnSemId, int *returnShmId, struct Buffer **returnShm)
         }
     }
 
-    shmId = shmget(SHMKEY, sizeof(struct Buffer)*1000, IPC_CREAT | 0666);
-    //共享内存有1000个Buffer块大小
+    // 创建共享内存，大小为1000个Buffer块，权限为0666
+    shmId = shmget(SHMKEY, sizeof(struct Buffer), IPC_CREAT | 0666);
 
     if(shmId == -1)
     {
@@ -38,6 +41,8 @@ void Initialize(int *returnSemId, int *returnShmId, struct Buffer **returnShm)
     #ifdef DEBUG
      printf("share memory creation succeeded!\n");
     #endif
+
+    // 将共享内存映射到当前进程的地址空间
     void *temp = NULL;
     struct Buffer *shm = NULL;
     temp = shmat(shmId, 0, 0);
@@ -62,22 +67,15 @@ void Initialize(int *returnSemId, int *returnShmId, struct Buffer **returnShm)
 void Add(struct Buffer *shm, Type buf)
 {
     Type product = buf;
-    #ifdef DEBUG
-    //printf("producer %d: added product %s into buffer.\t", getpid(), product.Instrtype);
-    #endif
     shm -> buffer [shm -> end] = product;
     shm -> end = (shm -> end + 1) % BUFNUM;
-    //printf("|%s|\n", shm -> buffer);
 }
 
 Type Remove(struct Buffer *shm)
 {
     Type product = shm -> buffer [shm -> start];
-    //printf("consumer %d: removed product %c from buffer:\t", getpid(), product);
-    //memset(&shm->buffer[shm->start], 0, sizeof(Type));
     shm -> start = (shm -> start + 1) % BUFNUM;
     return product;
-    //printf("|%s|\n", shm -> buffer);
 }
 
 void ShmDestroy(int semId, struct Buffer * shm)

@@ -13,7 +13,7 @@
 #define DEBUG
 #define SEMKEY 123
 #define SHMKEY 456
-#define BUFNUM 10
+#define BUFNUM 1000
 #define SEMNUM 3
 #define Type Instruction
 #if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)

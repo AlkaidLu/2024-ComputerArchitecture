@@ -157,7 +157,9 @@ int MIPSSimulator::executeInstruction(int semId,struct Buffer *shm) {
     instr.addr = instruction & 0x3FFFFFF;
 
     if (instruction == 0x00000000) { // Check for halt instruction
+            printf("!!!ATTENTION!!!\n");
             printf("halt!\n");
+            printf("!!!ATTENTION!!!\n");
             Producer(semId, shm, instr); 
             return 1;
         }
@@ -211,9 +213,7 @@ int MIPSSimulator::executeInstruction(int semId,struct Buffer *shm) {
 void MIPSSimulator::run(int semId,struct Buffer *shm) {
     while (pc < memory.getsize()) {
         if(executeInstruction(semId,shm)==1){
-            
             break;
         }
-        
     }
 }

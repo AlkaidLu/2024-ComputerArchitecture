@@ -2,7 +2,7 @@
 CXX = g++
 
 # 定义编译选项
-CXXFLAGS = -Wall -g
+CXXFLAGS = -Wall -g -O0
 
 # 定义链接选项
 LDFLAGS = 
