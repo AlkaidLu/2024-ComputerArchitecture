@@ -30,7 +30,7 @@ void Initialize(int *returnSemId, int *returnShmId, struct Buffer **returnShm)
         }
     }
 
-    // 创建共享内存，大小为1000个Buffer块，权限为0666
+    // 创建共享内存，大小为Buffer块大小，权限为0666
     shmId = shmget(SHMKEY, sizeof(struct Buffer), IPC_CREAT | 0666);
 
     if(shmId == -1)
@@ -170,5 +170,3 @@ Type Consumer(int semId, struct Buffer *shm)
 
     return product;
 }
-
-
