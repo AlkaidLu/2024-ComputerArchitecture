@@ -1,8 +1,6 @@
 # README
 
-这是我的流水线作业的说明！
-
-
+这是增加了指令cache的流水线作业的说明！
 
 ## 安装和运行
 
@@ -12,248 +10,118 @@
 - `g++` 编译器
 - Git
 
-### 运行说明
+## 使用说明
 
-`make`
+### 编译项目
 
-`./main "code.txt"`
+使用 `make` 命令编译项目。
 
+### 运行项目
 
+运行项目时，使用以下命令：
 
-## 项目结构 
+```bash
+./main "code.txt"
+```
 
-项目包含以下关键文件： 
+## 项目结构
 
-- **code.asm**：用于仿真的汇编代码。 
+项目包含以下关键文件：
 
-- **code.txt**：作为仿真输入的机器码文件。 
+- **code.asm**：用于仿真的汇编代码。
+- **code.txt**：作为仿真输入的机器码文件。
+- **comm.h**，**fast.h**，**memory.h**，**Instruction.h**：定义仿真器各组件的头文件。
+- **MIPSSimulator.cpp**，**Pipeline.cpp**，**producer_consumer.cpp**：实现仿真器、流水线阶段和同步机制的源文件。
+- **pipeline_output.txt**：包含流水线阶段信息的输出文件。
+- **result.txt**：存储最终仿真结果的文本文件。
+- **main.cpp**：main函数。
 
-- **comm.h**，**fast.h**，**memory.h**，**Instruction.h**：定义仿真器各组件的头文件。 
+主要新增文件：
 
--  **MIPSSimulator.cpp**，**Pipeline.cpp**，**producer_consumer.cpp**：实现仿真器、流水线阶段和同步机制的源文件。 
-
--  **pipeline_output.txt**：包含流水线阶段信息的输出文件。 
-
--  **result.txt**：存储最终仿真结果的文本文件。
-
-  
-
-
-
-
+* **cache.txt**：包含了最终状态的cache内容的输出。
+* **iCache.h**：指令cache实现的头文件。
 
 ## 代码说明
 
-是在Project01基础上修改的。
+是在Project02基础上修改的。
 
-实现了时序和执行分离，二者分别在子进程和父进程里面，使用了生产者消费者模型这部分在`main.cpp`里面。
+## 指令缓存模拟器 (iCache) 说明
 
-```c++
-int semId = -1, shmId = -1;
-    struct Buffer *shm = NULL;
+### 概述
 
-    Initialize(&semId, &shmId, &shm);
+本项目中的指令缓存模拟器 (`iCache`) 是一个模拟 MIPS 架构指令缓存的组件。它支持 LRU (最近最少使用) 替换策略和二路组相联映射。该模拟器是理解缓存工作原理和性能影响的关键部分。
 
-    int pid=fork();
-    if(pid < 0)
-        {
-            printf("fork failed!\n");
-            exit(EXIT_FAILURE);
-        }
-    if(pid==0){
-        PipeLine(semId, shm);//输入是共享内存那部分
-        exit(EXIT_SUCCESS);
-    }
-    else{
-        MIPSSimulator simulator(1024); // Initialize simulator with 1024 bytes of memory
-        simulator.load_memory(argv[1]); // Load the program into memory
-        simulator.save_memory("instruction_data.txt");
-        simulator.run(semId,shm); // Start executing instructions
-        //在这个部分把译码的放入共享内存里
-        simulator.save_memory("result.txt");
-        
-        int status;
-        waitpid(pid, &status, 0); // 等待子进程结束
-        printf("OK!Child exited normally!\n");
-        if (WIFEXITED(status)) {
-            printf("Child exited with status %d\n", WEXITSTATUS(status));
-        }
+### 代码说明
 
-        exit(EXIT_SUCCESS);
-     
-    }
-    
-    getchar();
-    Destroy(semId, shmId, shm);
-    return 0;
+**主要内容在iCache类里**
+
+#### `iCache` 类
+
+`iCache` 类是模拟器的核心，负责处理缓存的查找、插入和替换逻辑。
+
+##### 主要方法
+
+- `find(uint32_t addr, int time, int &slot)`：查找指定地址的指令是否在缓存中，若命中则更新访问时间，否则返回用于插入的槽位。
+- `insert(uint32_t addr, int time, int slot, const Memory& M)`：在缓存未命中时，从内存中加载指令并插入到指定槽位。
+- `reach_iCache(int semId, uint32_t addr, int *fasttime, const Memory& M)`：封装地址查找及插入流程，控制并更新访问时间，用于模拟缓存命中和未命中的惩罚。
+- `print_iCache(const char* filename)`：将缓存内容写入文件，便于调试和分析。
+
+```cpp
+class iCache{
+private:
+    int numSets;//组数
+    int setSize;//相联度
+    static constexpr size_t LineSize = blockSize / 4;
+public:
+    vector<vector<Tag>> tags;
+    vector<vector<Data<LineSize>>> data;
+    iCache(int numSets=64, int setSize=2) : numSets(numSets), setSize(setSize) {}
+    bool find(uint32_t addr, int time, int &slot) {}
+    void insert(uint32_t addr, int time, int slot, const Memory& M) {}
+    void reach_iCache(int semId, uint32_t addr, int *fasttime, const Memory& M){}
+};
 ```
 
+### 功能特点
 
+- **LRU 替换策略**：当缓存满时，最近最少使用的缓存行将被替换。
+- **二路组相联映射**：缓存被分为多个组，每组有两个槽位，可以存储两条指令。
+- **缓存行大小可配置**：每行可容纳的指令数量 (`LineSize`) 可以根据需要配置。(在pipeline.h里的class )
+  ```cpp
+  // 流水线类
+  class Pipeline {
+  private:
+      STAGE IF, DE, EXE, MEM, WB, EMPTY;
+      FunctionalUnit IM, RF_R, RF_W, ALU, FPU, DM;
+      int  fasttimes;
+      iCache<16> cache;
+      int instructionnumber;
+      InstructionQueue newqueue;
 
-执行部分的主要逻辑实现在`MIPSSimulator.cpp`里面，
+  public:
+      Pipeline() : fasttimes(0), cache(4,2), instructionnumber(0) {
+          newqueue.queue.resize(1000);
+      }
 
-```c++
-int MIPSSimulator::executeInstruction(int semId,struct Buffer *shm) {
-    ···
-if (instruction == 0x00000000) { // Check for halt instruction
-            printf("!!!ATTENTION!!!\n");
-            printf("halt!\n");
-            printf("!!!ATTENTION!!!\n");
-            Producer(semId, shm, instr); 
-            return 1;
-        }
-    switch (instr.opcode) {
-        case OP_addi: 
-            pc = INSN_addi(instruction); 
-            strcpy(instr.Instrtype,"ADDI");
-            instr.Cycles2live=5;
-            break;
-        case OP_lwcl: 
-            pc = INSN_lwcl(instruction); 
-            strcpy(instr.Instrtype,"LWC1");
-            instr.Cycles2live=4;
-            break;
-    ······
-    }
-    Producer(semId, shm, instr); 
-    
-    return 0;
-}
-```
+  void executeCycle(int semId, Buffer* shm, const Memory& memory);
+  void pipeprint_tofile( STAGE IF, STAGE DE, STAGE EXE, STAGE MEM, STAGE WB);
+  void pipeprint(STAGE IF,STAGE DE,STAGE EXE,STAGE MEM,STAGE WB);
+  void print_iCache(const char* filename);
+  };
+  ```
+- **缓存状态管理**：每个缓存行都有有效的状态标记，包括 `INVALID`、`VALID` 和 `DIRTY`。
 
-通过上面这个函数，我把`instr`,一个Instruction类型的实例放进了共享内存
+### `fasttimes` 一致性说明
 
+`fasttimes` 是一个用于跟踪模拟器执行进度的变量，它记录了从模拟开始以来的时钟周期数。这个变量在整个模拟器中被多个组件共享，以确保所有部分都能同步地更新和访问。使用了互斥锁以保证读写的同步性。
 
+以下是 `fasttimes` 读写的关键点：
 
-时序部分的实现主要是在`pipeline.cpp`里面
+* **同步更新** ：在每个时钟周期结束时，`fasttimes` 会被递增，以反映模拟时间的流逝。
+* **缓存命中和未命中** ：在 `reach_iCache` 方法中，当发生缓存未命中时，`fasttimes` 会被用来增加额外的惩罚周期，以模拟加载数据到缓存所需的额外时间。
+* **流水线同步** ：在流水线模拟器中，`fasttimes` 确保了不同阶段的指令能够在正确的时间执行和完成。
+* **结果验证** ：`fasttimes` 可以用来验证模拟器是否按照预期执行，以及是否所有指令都在正确的时钟周期内完成。
 
-```c++
-int PipeLine(int semId, struct Buffer* shm){
-    //从共享内存里取已经译码好了的Instruction
-    STAGE IF,DE,EXE,MEM,WB,EMPTY;//全部是空的
-    FunctionalUnit IM,RF_R,RF_W,ALU,FPU,DM;//全部不忙
-    //前半周期写寄存器，后半周期读寄存器
-    int fasttimes=0;
-    int instructionnumber=0;
-    InstructionQueue newqueue;
+### 查看结果
 
-    while(1){
-    //得到译码后的指令
-    if(newqueue.queue[newqueue.rear].instruction!=0x00000000||newqueue.count==0){
-        
-        Instruction newinstr=Consumer(semId,shm);
-        newinstr.timeAvail=fasttimes;
-        newqueue.enqueue(newinstr);
-        
-        #ifdef DEBUG
-        printf("Get %s.\n", newinstr.Instrtype);
-        #endif
-
-    }
-    //流水线在读入halt后还应该把里面的代码执行完
-    if((newqueue.getend().instruction==0x00000000&&newqueue.count==1&&
-    WB.valid==1&&MEM.valid==1&&EXE.valid==1&&DE.valid==1&&IF.valid==1)){
-        printf("PipeLine HALT!!!\n");
-        printf("PipeLine is EMPTY now!\n");
-        printf("The number of cycles is:%d.\n",fasttimes);
-        printf("The number of instructions is:%d.\n",instructionnumber);
-        printf("The CPI if my model pipeline is:%f.\n",float(fasttimes)/float(instructionnumber));
-        break;
-    } 
-
-    //时钟周期++
-    fasttimes++;
-
-    //指令执行完毕WB=>
-    if(WB.valid==0){
-        WB=EMPTY;
-    }
-
-    //MEM=>WB
-    //MEM有指令，WB指令做完了，MEM阶段的指令需要写回，
-    if( MEM.valid==0 && WB.valid==1 ){
-        if( MEM.instr.Cycles2live>0){
-            WB=MEM;
-            WB.instr.Cycles2live--;
-            
-        }
-        MEM=EMPTY;  
-    }
-   
-    //EXE=>MEM
-    if(EXE.valid==0 && MEM.valid==1 && !DM.busy){
-        if( EXE.instr.Cycles2live>0){
-            MEM=EXE;
-            MEM.instr.Cycles2live--;
-        }
-        ALU.busy=0;
-        EXE=EMPTY;
-    }
-   
-
-    //DE=>EXE
-    if( DE.valid==0 && EXE.valid==1 && !ALU.busy){//ALU不冲突就可以了，有整数有浮点(暂不考虑)
-        if(DE.instr.Cycles2live>0){
-            EXE=DE;
-            EXE.instr.Cycles2live--;
-            ALU.busy=1;
-        }
-        DE=EMPTY;
-    }
-   
-
-    //IF=>DE
-    if(IF.valid==0 &&  DE.valid==1 
-    && ((!(IF.instr.r2==DE.instr.r1 )&& !(IF.instr.r3==DE.instr.r1)) || DE.instr.instruction==0 ||IF.instr.instruction==0)){
-        if(IF.instr.Cycles2live>0){
-            DE=IF;
-            DE.instr.Cycles2live--;
-        }
-        IF=EMPTY;
-    }
-
-    //newinstr=>IF
-   if(newqueue.getend().instruction!=0x00000000&&
-    newqueue.getend().timeAvail<=fasttimes && IF.valid==1 && !IM.busy){
-        if( strcmp(DE.instr.Instrtype,"J")&& strcmp(DE.instr.Instrtype,"BEQ")){
-            IF.instr=newqueue.dequeue();
-            instructionnumber++;//统计指令数量
-            IF.instr.Cycles2live--;
-            IF.valid=0;
-        }
-        else{
-            IF=EMPTY;
-        }
-    }
-
-
-    pipeprint_tofile(fasttimes,IF,DE,EXE,MEM,WB);
-
-    #ifdef DEBUG
-    pipeprint(fasttimes,IF,DE,EXE,MEM,WB);
-    #endif
-    }
-    
-   
-    return 0;
-}
-```
-
-
-
-
-
-## 结果
-
-结果主要存在pipeline.txt里。看起来应该行为没有问题！
-
-然后这个是运行完毕的截图。
-
-这下面的不会出现在pipeline.txt里面。
-
-![image-20241021221129958](C:\Users\Lianyi\AppData\Roaming\Typora\typora-user-images\image-20241021221129958.png)
-
-
-
-
-
+缓存的输出结果将被写入到 `cache.txt` 文件中，可以查看该文件了解缓存的详细状态。

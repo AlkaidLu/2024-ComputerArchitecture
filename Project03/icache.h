@@ -81,7 +81,7 @@ public:
         return false;
     }
 
-// 插入完整缓存行 (8 条指令)
+// 插入完整缓存行 
     void insert(uint32_t addr, int time, int slot, const Memory& M) {
         int indexBits = log2(numSets);
         int blkOffsetBits = log2(LineSize);
