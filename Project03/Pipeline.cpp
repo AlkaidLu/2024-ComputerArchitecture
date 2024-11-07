@@ -1,14 +1,15 @@
 #include"Pipeline.h"
 
-void Pipeline::executeCycle(int semId, struct Buffer* shm){
+void Pipeline::executeCycle(int semId, struct Buffer* shm, const Memory& memory){
 
     while(1){
     //得到译码后的指令
     if(newqueue.queue[newqueue.rear].instruction!=0x00000000||newqueue.count==0){
         
         Instruction newinstr=Consumer(semId,shm);
+        cache.reach_iCache(semId, newinstr.pc, &fasttimes, memory);
         SemWait(semId,3);
-        newinstr.timeAvail=*fasttimes;
+        newinstr.timeAvail=fasttimes;
         SemSignal(semId,3);
         newqueue.enqueue(newinstr);
         
@@ -23,16 +24,16 @@ void Pipeline::executeCycle(int semId, struct Buffer* shm){
         printf("PipeLine HALT!!!\n");
         printf("PipeLine is EMPTY now!\n");
         SemWait(semId,3);
-        printf("The number of cycles is:%d.\n",*fasttimes);
+        printf("The number of cycles is:%d.\n",fasttimes);
         printf("The number of instructions is:%d.\n",instructionnumber);
-        printf("The CPI if my model pipeline is:%f.\n",float(*fasttimes)/float(instructionnumber));
+        printf("The CPI if my model pipeline is:%f.\n",float(fasttimes)/float(instructionnumber));
         SemSignal(semId,3);
         break;
     } 
 
     //时钟周期++
     SemWait(semId,3);
-    (*fasttimes)++;
+    fasttimes++;
     SemSignal(semId,3);
     //指令执行完毕WB=>
     if(WB.valid==0){
@@ -85,7 +86,7 @@ void Pipeline::executeCycle(int semId, struct Buffer* shm){
     //newinstr=>IF
     SemWait(semId,3);
     if(newqueue.getend().instruction!=0x00000000&&
-    newqueue.getend().timeAvail<=*fasttimes && IF.valid==1 && !IM.busy){
+    newqueue.getend().timeAvail<=fasttimes && IF.valid==1 && !IM.busy){
         SemSignal(semId,3);
         if( strcmp(DE.instr.Instrtype,"J")&& strcmp(DE.instr.Instrtype,"BEQ")){
             IF.instr=newqueue.dequeue();
@@ -102,7 +103,7 @@ void Pipeline::executeCycle(int semId, struct Buffer* shm){
     }
 
     SemWait(semId,3);
-    pipeprint_tofile(*fasttimes,IF,DE,EXE,MEM,WB);
+    pipeprint_tofile(IF,DE,EXE,MEM,WB);
     SemSignal(semId,3);
 
     #ifdef DEBUG_PIPE
@@ -115,7 +116,7 @@ void Pipeline::executeCycle(int semId, struct Buffer* shm){
 
 }
 
-void Pipeline::pipeprint_tofile(int fasttimes, STAGE IF, STAGE DE, STAGE EXE, STAGE MEM, STAGE WB) {
+void Pipeline::pipeprint_tofile( STAGE IF, STAGE DE, STAGE EXE, STAGE MEM, STAGE WB) {
     // 打开文件，追加写入
     std::ofstream outfile("pipeline_output.txt", std::ios_base::app);
     
@@ -155,7 +156,7 @@ void Pipeline::pipeprint_tofile(int fasttimes, STAGE IF, STAGE DE, STAGE EXE, ST
     outfile.close();
 }
 
-void Pipeline::pipeprint(int fasttimes,STAGE IF,STAGE DE,STAGE EXE,STAGE MEM,STAGE WB){
+void Pipeline::pipeprint(STAGE IF,STAGE DE,STAGE EXE,STAGE MEM,STAGE WB){
     printf("fasttime:%d\n",fasttimes);
     printf("IF\tDE\tEXE\tMEM\tWB\n") ;
     printf("%s\t%s\t%s\t%s\t%s\n",IF.instr.Instrtype,
@@ -165,3 +166,7 @@ void Pipeline::pipeprint(int fasttimes,STAGE IF,STAGE DE,STAGE EXE,STAGE MEM,STA
     DE.instr.Cycles2live,EXE.instr.Cycles2live,
     MEM.instr.Cycles2live,WB.instr.Cycles2live);
 }
+
+void Pipeline::print_iCache(const char* filename) {
+        cache.print_iCache(filename);
+    }

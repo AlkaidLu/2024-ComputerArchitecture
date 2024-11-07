@@ -1,0 +1,16 @@
+Set 0, Slot 0: Tag = 20, Status = 1, trdy = 1346
+Data: 00000000 00000000 00000000 00000000 
+Set 0, Slot 1: Tag = 19, Status = 1, trdy = 1291
+Data: 22100004 21290001 08000047 00000000 
+Set 1, Slot 0: Tag = 18, Status = 1, trdy = 1288
+Data: 46142502 46142d00 e6900000 22100004 
+Set 1, Slot 1: Tag = 19, Status = 1, trdy = 1292
+Data: 21290001 08000047 00000000 00000000 
+Set 2, Slot 0: Tag = 19, Status = 1, trdy = 1293
+Data: 08000047 00000000 00000000 00000000 
+Set 2, Slot 1: Tag = 18, Status = 1, trdy = 1289
+Data: 46142d00 e6900000 22100004 21290001 
+Set 3, Slot 0: Tag = 17, Status = 1, trdy = 1294
+Data: 11280008 c6900000 46142502 46142d00 
+Set 3, Slot 1: Tag = 18, Status = 1, trdy = 1290
+Data: e6900000 22100004 21290001 08000047 

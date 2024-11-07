@@ -1,52 +1,52 @@
-fasttime: 101
+fasttime: 51
 IF        DE        EXE       MEM       WB        
 LWC1                                              
 3         0         0         0         0         
-fasttime: 152
+fasttime: 102
 IF        DE        EXE       MEM       WB        
 ADDI      LWC1                                    
 4         2         0         0         0         
-fasttime: 203
+fasttime: 153
 IF        DE        EXE       MEM       WB        
 ADDI      ADDI      LWC1                          
 4         3         1         0         0         
-fasttime: 254
+fasttime: 204
 IF        DE        EXE       MEM       WB        
 LWC1      ADDI      ADDI      LWC1                
 3         3         2         0         0         
-fasttime: 305
+fasttime: 255
 IF        DE        EXE       MEM       WB        
 ADDI      LWC1      ADDI      ADDI                
 4         2         2         1         0         
-fasttime: 356
+fasttime: 306
 IF        DE        EXE       MEM       WB        
 BEQ       ADDI      LWC1      ADDI      ADDI      
 1         3         1         1         0         
-fasttime: 407
+fasttime: 357
 IF        DE        EXE       MEM       WB        
           BEQ       ADDI      LWC1      ADDI      
 0         0         2         0         0         
-fasttime: 458
+fasttime: 358
 IF        DE        EXE       MEM       WB        
 LWC1                          ADDI                
 3         0         0         1         0         
-fasttime: 459
+fasttime: 409
 IF        DE        EXE       MEM       WB        
 MULS      LWC1                          ADDI      
 4         2         0         0         0         
-fasttime: 510
+fasttime: 460
 IF        DE        EXE       MEM       WB        
 ADDS      MULS      LWC1                          
 4         3         1         0         0         
-fasttime: 561
+fasttime: 511
 IF        DE        EXE       MEM       WB        
 SWC1      ADDS      MULS      LWC1                
 3         3         2         0         0         
-fasttime: 612
+fasttime: 562
 IF        DE        EXE       MEM       WB        
 ADDI      SWC1      ADDS      MULS                
 4         2         2         1         0         
-fasttime: 663
+fasttime: 613
 IF        DE        EXE       MEM       WB        
 ADDI      ADDI      SWC1      ADDS      MULS      
 4         3         1         1         0         
@@ -1850,3 +1850,743 @@ fasttime: 1113
 IF        DE        EXE       MEM       WB        
 ADDI      ADDI      SWC1      ADDS      MULS      
 4         3         1         1         0         
+fasttime: 1114
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1115
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1116
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1117
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1118
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1119
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1120
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1121
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1122
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1123
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1124
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1125
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1126
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1127
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1128
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1129
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1130
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1131
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1132
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1133
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1134
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1135
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1136
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1137
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1138
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1139
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1140
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1141
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1142
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1143
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1144
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1145
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1146
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1147
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1148
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1149
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1150
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1151
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1152
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1153
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1154
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1155
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1156
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1157
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1158
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1159
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1160
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1161
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1162
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1163
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1164
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1165
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1166
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1167
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1168
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1169
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1170
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1171
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1172
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1173
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1174
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1175
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1176
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1177
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1178
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1179
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1180
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1181
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1182
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1183
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1184
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1185
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1186
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1187
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1188
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1189
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1190
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1191
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1192
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1193
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1194
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1195
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1196
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1197
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1198
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1199
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1200
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1201
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1202
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1203
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1204
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1205
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1206
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1207
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1208
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1209
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1210
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1211
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1212
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1213
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1214
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1215
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1216
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1217
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1218
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1219
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1220
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1221
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1222
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1223
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1224
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1225
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1226
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1227
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1228
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1229
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1230
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1231
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1232
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1233
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1234
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1235
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1236
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1237
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1238
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1239
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1240
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1241
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1242
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1243
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1244
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1245
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1246
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1247
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1248
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1249
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1250
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1251
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1252
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1253
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1254
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1255
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1256
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1257
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1258
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1259
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1260
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1261
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1262
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1263
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1264
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1265
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1266
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1267
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1268
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1269
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1270
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1271
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1272
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1273
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1274
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1275
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1276
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1277
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1278
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1279
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1280
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1281
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1282
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1283
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1284
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1285
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1286
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1287
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1288
+IF        DE        EXE       MEM       WB        
+LWC1                                              
+3         0         0         0         0         
+fasttime: 1289
+IF        DE        EXE       MEM       WB        
+MULS      LWC1                                    
+4         2         0         0         0         
+fasttime: 1290
+IF        DE        EXE       MEM       WB        
+ADDS      MULS      LWC1                          
+4         3         1         0         0         
+fasttime: 1291
+IF        DE        EXE       MEM       WB        
+SWC1      ADDS      MULS      LWC1                
+3         3         2         0         0         
+fasttime: 1292
+IF        DE        EXE       MEM       WB        
+ADDI      SWC1      ADDS      MULS                
+4         2         2         1         0         
+fasttime: 1293
+IF        DE        EXE       MEM       WB        
+ADDI      ADDI      SWC1      ADDS      MULS      
+4         3         1         1         0         
+fasttime: 1294
+IF        DE        EXE       MEM       WB        
+J         ADDI      ADDI      SWC1      ADDS      
+1         3         2         0         0         
+fasttime: 1295
+IF        DE        EXE       MEM       WB        
+          J         ADDI      ADDI                
+0         0         2         1         0         
+fasttime: 1296
+IF        DE        EXE       MEM       WB        
+BEQ                           ADDI      ADDI      
+1         0         0         1         0         
+fasttime: 1347
+IF        DE        EXE       MEM       WB        
+          BEQ                           ADDI      
+0         0         0         0         0         
+fasttime: 1348
+IF        DE        EXE       MEM       WB        
+                                                  
+0         0         0         0         0         

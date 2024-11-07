@@ -28,8 +28,9 @@ int main(int argc, char *argv[])
     Initialize(&semId, &shmId, &shm);
     int pid=fork();
 
-    int* shared_fasttimes = &shm->fasttimes;  // 在Buffer结构中加入一个`fasttimes`字段
-    *shared_fasttimes = 0;
+    MIPSSimulator simulator(1024); // Initialize simulator with 1024 bytes of memory
+    simulator.load_memory(argv[1]); // Load the program into memory
+    simulator.save_memory("instruction_data.txt");
 
     if(pid < 0)
         {
@@ -37,19 +38,18 @@ int main(int argc, char *argv[])
             exit(EXIT_FAILURE);
         }
     if(pid==0){
-        Pipeline pipe(shared_fasttimes);
-        pipe.executeCycle(semId, shm);//输入是共享内存那部分
+        Pipeline pipe;
+        pipe.executeCycle(semId, shm,simulator.get_memory());//输入是共享内存那部分
+        pipe.print_iCache("cache.txt");
         exit(EXIT_SUCCESS);
     }
     else{
-        MIPSSimulator simulator(1024); // Initialize simulator with 1024 bytes of memory
-        simulator.load_memory(argv[1]); // Load the program into memory
-        simulator.save_memory("instruction_data.txt");
-        simulator.run(semId,shm,shared_fasttimes); // Start executing instructions
+        
+        simulator.run(semId,shm); // Start executing instructions
         //在这个部分把译码的放入共享内存里
         simulator.save_memory("result.txt");
         //打印cache内容
-        simulator.print_iCache("cache.txt");
+        
         int status;
         waitpid(pid, &status, 0); // 等待子进程结束
         printf("OK!Child exited normally!\n");

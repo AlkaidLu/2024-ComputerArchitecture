@@ -3,7 +3,11 @@
 
 
 
-MIPSSimulator::MIPSSimulator(size_t memSize) : memory(memSize), pc(0x108), clock(0), cache(64,2){}
+MIPSSimulator::MIPSSimulator(size_t memSize) : memory(memSize), pc(0x108){}
+
+const Memory& MIPSSimulator::get_memory(){
+    return memory;
+}
 
 void MIPSSimulator::load_memory(const char* filename) {
     FILE* file = fopen(filename, "r");
@@ -64,9 +68,7 @@ void MIPSSimulator::save_memory(const char* filename) {
     fclose(file);
 }
 
-void MIPSSimulator::print_iCache(const char* filename) {
-        cache.print_iCache(filename);
-    }
+
 
 
 int MIPSSimulator::INSN_addi(int instruction) {
@@ -148,11 +150,10 @@ int MIPSSimulator::INSN_j(int instruction) {
 }
 
 
-int MIPSSimulator::executeInstruction(int semId,struct Buffer *shm,int * fasttimes) {
+int MIPSSimulator::executeInstruction(int semId,struct Buffer *shm) {
     uint32_t instruction = memory.loadWord(pc);
-    //假装从icache里拿数据
-    cache.reach_iCache(semId, pc, fasttimes, memory);
     Instruction instr;
+    instr.pc=pc;
     instr.instruction=instruction;
     instr.opcode = (instruction >> 26) & 0x3F;
     instr.funct = instruction & 0x3F; // 6位
@@ -217,9 +218,9 @@ int MIPSSimulator::executeInstruction(int semId,struct Buffer *shm,int * fasttim
     return 0;
 }
 
-void MIPSSimulator::run(int semId,struct Buffer *shm,int *fasttimes) {
+void MIPSSimulator::run(int semId,struct Buffer *shm) {
     while (pc < memory.getsize()) {
-        if(executeInstruction(semId,shm,fasttimes)==1){
+        if(executeInstruction(semId,shm)==1){
             break;
         }
     }

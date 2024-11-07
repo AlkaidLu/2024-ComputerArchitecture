@@ -17,12 +17,11 @@ private:
     Memory memory;
     RegisterFile registers;
     size_t pc;
-    int clock;
-    iCache<8> cache;
+    
 
 public:
     MIPSSimulator(size_t memSize);
-
+    const Memory& get_memory();
     void load_memory(const char* filename);
     void save_memory(const char* filename);
     void print_iCache(const char* filename);
@@ -33,8 +32,8 @@ public:
     int INSN_add_s(int instruction);
     int INSN_swcl(int instruction);
     int INSN_j(int instruction);
-    int executeInstruction(int semId,struct Buffer *shm,int *fasttimes);
-    void run(int semId,struct Buffer *shm,int* fasttimes);
+    int executeInstruction(int semId,struct Buffer *shm);
+    void run(int semId,struct Buffer *shm);
 };
 
 #endif // MIPSSIMULATOR_H

@@ -99,17 +99,18 @@ class Pipeline {
 private:
     STAGE IF, DE, EXE, MEM, WB, EMPTY;
     FunctionalUnit IM, RF_R, RF_W, ALU, FPU, DM;
-    int* fasttimes;
+    int  fasttimes;
+    iCache<16> cache;
     int instructionnumber;
     InstructionQueue newqueue;
 
 public:
-    Pipeline(int* externalFasttimes) : fasttimes(externalFasttimes), instructionnumber(0) {
+    Pipeline() : fasttimes(0), cache(4,2), instructionnumber(0) {
         newqueue.queue.resize(1000);
     }
 
-void executeCycle(int semId, Buffer* shm);
-void pipeprint_tofile(int fasttimes, STAGE IF, STAGE DE, STAGE EXE, STAGE MEM, STAGE WB);
-void pipeprint(int fasttimes,STAGE IF,STAGE DE,STAGE EXE,STAGE MEM,STAGE WB);
-
+void executeCycle(int semId, Buffer* shm, const Memory& memory);
+void pipeprint_tofile( STAGE IF, STAGE DE, STAGE EXE, STAGE MEM, STAGE WB);
+void pipeprint(STAGE IF,STAGE DE,STAGE EXE,STAGE MEM,STAGE WB);
+void print_iCache(const char* filename);
 };

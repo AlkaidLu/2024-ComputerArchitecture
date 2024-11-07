@@ -82,7 +82,7 @@ public:
     }
 
 // 插入完整缓存行 (8 条指令)
-    void insert(uint32_t addr, int time, int slot, Memory& M) {
+    void insert(uint32_t addr, int time, int slot, const Memory& M) {
         int indexBits = log2(numSets);
         int blkOffsetBits = log2(LineSize);
         int tag = addr >> (indexBits + blkOffsetBits);
@@ -99,8 +99,10 @@ public:
         data[setIndex][slot].line = instructions;  // Insert the 8 instructions
     }
 
-    void reach_iCache(int semId, uint32_t addr, int *fasttime, Memory& M){
+    void reach_iCache(int semId, uint32_t addr, int *fasttime, const Memory& M){
         int blkOffsetBits = log2(LineSize);
+        int indexBits = log2(numSets);
+        int tag = addr >> (indexBits + blkOffsetBits);
         int setIndex = (addr >> blkOffsetBits) & (numSets - 1);
 
         int slot=-1;
@@ -109,7 +111,9 @@ public:
             #ifdef DEBUG_CACHE
             SemWait(semId,3);
             cout<<"fasttime: "<<*fasttime<<endl;
-            cout << "Cache hit at set index "<<setIndex<< " with slot: " << slot << endl;
+            cout << "addr: " << bitset<32>(addr) << endl;           // 假设 addr 是 32 位整数
+            cout << "tag: " << bitset<29>(tag) << endl;  
+            cout << "Cache hit at set index "<<bitset<2>(setIndex)<< " with slot: " << slot << endl;
             SemSignal(semId,3);
             #endif
         } else {
@@ -121,7 +125,9 @@ public:
             #ifdef DEBUG_CACHE
             SemWait(semId,3);
             cout<<"fasttime: "<<*fasttime<<endl;
-            cout << "Cache miss, inserting at set index "<<setIndex<< " with slot: " << slot << endl;
+            cout << "addr: " << bitset<32>(addr) << endl;           // 假设 addr 是 32 位整数
+            cout << "tag: " << bitset<29>(tag) << endl;  
+            cout << "Cache miss, inserting at set index "<<bitset<2>(setIndex)<< " with slot: " << slot << endl;
             SemSignal(semId,3);
             #endif
 
