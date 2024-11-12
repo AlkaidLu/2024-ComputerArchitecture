@@ -185,7 +185,7 @@ int MIPSSimulator::executeInstruction(int semId,struct Buffer *shm) {
         case OP_beq: 
             pc = INSN_beq(instruction); 
             strcpy(instr.Instrtype,"BEQ");
-            instr.Cycles2live=2;
+            instr.Cycles2live=3;
             break;
         case OP_FType: 
             switch(instr.funct){
@@ -209,7 +209,7 @@ int MIPSSimulator::executeInstruction(int semId,struct Buffer *shm) {
         case OP_j: 
             pc = INSN_j(instruction); 
             strcpy(instr.Instrtype,"J");
-            instr.Cycles2live=2;
+            instr.Cycles2live=3;
             break;
         default: printf("error: unimplemented instruction\n"); printf("pc:%lx\n instruction:%x\n",pc,instruction); exit(-1);
     }

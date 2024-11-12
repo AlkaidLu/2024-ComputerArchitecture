@@ -88,7 +88,7 @@ void Pipeline::executeCycle(int semId, struct Buffer* shm, const Memory& memory)
     if(newqueue.getend().instruction!=0x00000000&&
     newqueue.getend().timeAvail<=fasttimes && IF.valid==1 && !IM.busy){
         SemSignal(semId,3);
-        if( strcmp(DE.instr.Instrtype,"J")&& strcmp(DE.instr.Instrtype,"BEQ")){
+        if( strcmp(DE.instr.Instrtype,"J")&& strcmp(DE.instr.Instrtype,"BEQ") &&strcmp(IF.instr.Instrtype,"J")&& strcmp(IF.instr.Instrtype,"BEQ")){
             IF.instr=newqueue.dequeue();
             instructionnumber++;//统计指令数量
             IF.instr.Cycles2live--;
